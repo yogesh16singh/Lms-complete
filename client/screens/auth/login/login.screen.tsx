@@ -103,7 +103,7 @@ export default function LoginScreen() {
       .then(async (res) => {
         console.log("res", res);
         await AsyncStorage.setItem("access_token", res.data.accessToken);
-        await AsyncStorage.setItem("refresh_token", res.data.refreshToken);
+        // await AsyncStorage.setItem("refresh_token", res.data.refreshToken);
         router.push("/(tabs)");
       })
       .catch((error) => {
