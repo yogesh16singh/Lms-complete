@@ -14,6 +14,7 @@ export default function index() {
 
   useEffect(() => {
     axios.get(`${SERVER_URI}/get-courses`).then((res: any) => {
+      console.log("courses", res);
       const courses: CoursesType[] = res.data.courses;
       const data = courses.filter((i: CoursesType) =>
         user?.courses?.some((d: any) => d._id === i._id)

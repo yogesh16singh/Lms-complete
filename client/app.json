@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Betafier",
-    "slug": "Betafier",
+    "name": "academy",
+    "slug": "academy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -14,14 +14,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.betafier.app"
+      "bundleIdentifier": "com.academy.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.betafier.app"
+      "package": "com.academy.app"
     },
     "web": {
       "bundler": "metro",
@@ -39,7 +39,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "56deae7e-60b5-478e-b99a-b6fe3972e11c"
+        "projectId": "db21406c-4d11-4866-8aec-d00863054a3c"
       }
     }
   }

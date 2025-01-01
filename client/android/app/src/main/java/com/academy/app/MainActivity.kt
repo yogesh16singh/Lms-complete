@@ -1,4 +1,4 @@
-package com.betafier.app
+package com.academy.app
 
 import android.os.Build
 import android.os.Bundle

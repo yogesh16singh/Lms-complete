@@ -30,9 +30,11 @@ export default function CoursesScreen() {
       .then((res) => {
         setcategories(res.data.layout.categories);
         fetchCourses();
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
       });
   }, []);
 
