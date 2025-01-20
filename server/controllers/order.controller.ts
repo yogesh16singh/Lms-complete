@@ -14,23 +14,113 @@ require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // create order
+// export const createOrder = CatchAsyncError(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const { courseId, payment_info } = req.body as IOrder;
+
+//       if (payment_info) {
+//         if ("id" in payment_info) {
+//           const paymentIntentId = payment_info.id;
+//           const paymentIntent = await stripe.paymentIntents.retrieve(
+//             paymentIntentId
+//           );
+
+//           if (paymentIntent.status !== "succeeded") {
+//             return next(new ErrorHandler("Payment not authorized!", 400));
+//           }
+//         }
+//       }
+
+//       const user = await userModel.findById(req.user?._id);
+
+//       const courseExistInUser = user?.courses.some(
+//         (course: any) => course._id.toString() === courseId
+//       );
+
+//       if (courseExistInUser) {
+//         return next(
+//           new ErrorHandler("You have already purchased this course", 400)
+//         );
+//       }
+
+//       const course: ICourse | null = await CourseModel.findById(courseId);
+
+//       if (!course) {
+//         return next(new ErrorHandler("Course not found", 404));
+//       }
+
+//       const data: any = {
+//         courseId: course._id,
+//         userId: user?._id,
+//         payment_info,
+//       };
+
+//       const mailData = {
+//         order: {
+//           _id: course._id.toString().slice(0, 6),
+//           name: course.name,
+//           price: course.price,
+//           date: new Date().toLocaleDateString("en-US", {
+//             year: "numeric",
+//             month: "long",
+//             day: "numeric",
+//           }),
+//         },
+//       };
+
+//       const html = await ejs.renderFile(
+//         path.join(__dirname, "../mails/order-confirmation.ejs"),
+//         { order: mailData }
+//       );
+
+//       try {
+//         if (user) {
+//           await sendMail({
+//             email: user.email,
+//             subject: "Order Confirmation",
+//             template: "order-confirmation.ejs",
+//             data: mailData,
+//           });
+//         }
+//       } catch (error: any) {
+//         return next(new ErrorHandler(error.message, 500));
+//       }
+
+//       user?.courses.push(course?._id);
+
+//       await redis.set(req.user?._id, JSON.stringify(user));
+
+//       await user?.save();
+
+//       await NotificationModel.create({
+//         user: user?._id,
+//         title: "New Order",
+//         message: `You have a new order from ${course?.name}`,
+//       });
+
+//       course.purchased = course.purchased + 1;
+
+//       await course.save();
+
+//       newOrder(data, res, next);
+//     } catch (error: any) {
+//       return next(new ErrorHandler(error.message, 500));
+//     }
+//   }
+// );
+
+// create order (skipping payment process)
 export const createOrder = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { courseId, payment_info } = req.body as IOrder;
+      const { courseId } = req.body as IOrder;
 
-      if (payment_info) {
-        if ("id" in payment_info) {
-          const paymentIntentId = payment_info.id;
-          const paymentIntent = await stripe.paymentIntents.retrieve(
-            paymentIntentId
-          );
-
-          if (paymentIntent.status !== "succeeded") {
-            return next(new ErrorHandler("Payment not authorized!", 400));
-          }
-        }
-      }
+      // Mock payment process for testing
+      const mockPaymentInfo = {
+        id: "mock_client_secret_123456",
+        status: "succeeded",
+      };
 
       const user = await userModel.findById(req.user?._id);
 
@@ -53,7 +143,7 @@ export const createOrder = CatchAsyncError(
       const data: any = {
         courseId: course._id,
         userId: user?._id,
-        payment_info,
+        payment_info: mockPaymentInfo, // Using mock payment info
       };
 
       const mailData = {
@@ -96,19 +186,25 @@ export const createOrder = CatchAsyncError(
       await NotificationModel.create({
         user: user?._id,
         title: "New Order",
-        message: `You have a new order from ${course?.name}`,
+        message: `You have a new order for ${course?.name}`,
       });
 
       course.purchased = course.purchased + 1;
 
       await course.save();
 
-      newOrder(data, res, next);
+      // Mock order confirmation
+      res.status(201).json({
+        success: true,
+        message: "Order created successfully (payment process skipped)",
+        order: data,
+      });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
     }
   }
 );
+
 
 // create order for mobile
 export const createMobileOrder = CatchAsyncError(
@@ -214,24 +310,41 @@ export const sendStripePublishableKey = CatchAsyncError(
 );
 
 // new payment
+// export const newPayment = CatchAsyncError(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const myPayment = await stripe.paymentIntents.create({
+//         amount: req.body.amount,
+//         currency: "GBP",
+//         metadata: {
+//           company: "E-Learning",
+//         },
+//         automatic_payment_methods: {
+//           enabled: true,
+//         },
+//       });
+
+//       res.status(201).json({
+//         success: true,
+//         client_secret: myPayment.client_secret,
+//       });
+//     } catch (error: any) {
+//       return next(new ErrorHandler(error.message, 500));
+//     }
+//   }
+// );
+
 export const newPayment = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const myPayment = await stripe.paymentIntents.create({
-        amount: req.body.amount,
-        currency: "GBP",
-        metadata: {
-          company: "E-Learning",
-        },
-        automatic_payment_methods: {
-          enabled: true,
-        },
-      });
-
-      res.status(201).json({
+      // Skip actual payment process
+      const mockPaymentIntent = {
+        client_secret: "mock_client_secret_123456",
         success: true,
-        client_secret: myPayment.client_secret,
-      });
+        message: "Payment process skipped for testing purposes",
+      };
+
+      res.status(201).json(mockPaymentIntent);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
     }

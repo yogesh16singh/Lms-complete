@@ -32,7 +32,7 @@ interface ICourseData extends Document {
   questions: IComment[];
 }
 
- export interface ICourse extends Document {
+export interface ICourse extends Document {
   name: string;
   description: string;
   categories: string;
@@ -58,7 +58,7 @@ const reviewSchema = new Schema<IReview>({
   },
   comment: String,
   commentReplies: [Object],
-},{timestamps:true});
+}, { timestamps: true });
 
 const linkSchema = new Schema<ILink>({
   title: String,
@@ -69,7 +69,7 @@ const commentSchema = new Schema<IComment>({
   user: Object,
   question: String,
   questionReplies: [Object],
-},{timestamps:true});
+}, { timestamps: true });
 
 const courseDataSchema = new Schema<ICourseData>({
   videoUrl: String,
@@ -93,8 +93,8 @@ const courseSchema = new Schema<ICourse>({
     type: String,
     required: true,
   },
-  categories:{
-    type:String,
+  categories: {
+    type: String,
     required: true,
   },
   price: {
@@ -112,31 +112,31 @@ const courseSchema = new Schema<ICourse>({
       type: String,
     },
   },
-  tags:{
+  tags: {
     type: String,
     required: true,
   },
-  level:{
+  level: {
     type: String,
     required: true,
   },
-  demoUrl:{
+  demoUrl: {
     type: String,
     required: true,
   },
-  benefits: [{title: String}],
-  prerequisites: [{title: String}],
+  benefits: [{ title: String }],
+  prerequisites: [{ title: String }],
   reviews: [reviewSchema],
-   courseData: [courseDataSchema],
-   ratings:{
-     type: Number,
-     default: 0,
-   },
-   purchased:{
+  courseData: [courseDataSchema],
+  ratings: {
     type: Number,
     default: 0,
-   },
-},{timestamps: true});
+  },
+  purchased: {
+    type: Number,
+    default: 0,
+  },
+}, { timestamps: true });
 
 
 const CourseModel: Model<ICourse> = mongoose.model("Course", courseSchema);

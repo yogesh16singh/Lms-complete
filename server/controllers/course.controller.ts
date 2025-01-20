@@ -28,6 +28,8 @@ export const uploadCourse = CatchAsyncError(
           url: myCloud.secure_url,
         };
       }
+      console.log(data);
+      
       createCourse(data, res, next);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));

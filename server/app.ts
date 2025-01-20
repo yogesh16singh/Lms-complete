@@ -13,15 +13,30 @@ import layoutRouter from "./routes/layout.route";
 import { rateLimit } from "express-rate-limit";
 
 // body parser
+// cors => cross origin resource sharing
+app.use(cors({
+  origin: 'http://localhost:3000', // Frontend URL
+  credentials: true, // Allow cookies
+}));
 app.use(express.json({ limit: "50mb" }));
 
 // cookie parser
 app.use(cookieParser());
 
-// cors => cross origin resource sharing
-app.use(cors({
-  origin: ["*",'http://localhost:3000/'],
-  credentials: true,}));
+
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*")
+// }) 
+
+// app.use(cors({ origin: 'http://localhost:3000' })); // Replace with your Next.js frontend URL
+
+
+  // app.use(cors());
+
+// app.use(cors({ origin: 'http://localhost:3000' }));
+
+
+
 
 // api requests limit
 const limiter = rateLimit({
