@@ -18,6 +18,8 @@ const CoursePlayer: FC<Props> = ({ videoUrl }) => {
         videoId: videoUrl,
       })
       .then((res) => {
+        // console.log(res.data);
+        
         setVideoData(res.data);
       });
   }, [videoUrl]);
@@ -26,7 +28,8 @@ const CoursePlayer: FC<Props> = ({ videoUrl }) => {
     <div style={{position:"relative",paddingTop:"56.25%",overflow:"hidden"}}>
       {videoData.otp && videoData.playbackInfo !== "" && (
         <iframe
-          src={`https://player.vdocipher.com/v2/?otp=${videoData?.otp}&playbackInfo=${videoData.playbackInfo}&player=Ub9OiZXIOeUXH0Nv`}
+        // &player=Ub9OiZXIOeUXH0Nv
+          src={`https://player.vdocipher.com/v2/?otp=${videoData?.otp}&playbackInfo=${videoData.playbackInfo}`}
           style={{
             position: "absolute",
             top: 0,

@@ -6,6 +6,9 @@ import Signup from "./components/Auth/SignUp";
 import Verification from "./components/Auth/Verification";
 import { useSelector } from "react-redux";
 import { redirect } from "next/navigation";
+// import cors from "cors";
+// const cors = require("cors");
+// app.use(cors());
 
 interface Props {}
 
@@ -13,11 +16,11 @@ const Page: FC<Props> = (props) => {
   const [route, setRoute] = useState("Login");
   const { user } = useSelector((state: any) => state.auth);
 
-  // useEffect(() => {
-  //   if (user) {
-  //     redirect("/admin");
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (user) {
+      redirect("/admin");
+    }
+  }, [user]);
   
   return (
     <div>

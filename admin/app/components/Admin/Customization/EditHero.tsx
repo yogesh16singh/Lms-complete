@@ -29,6 +29,8 @@ const EditHero: FC<Props> = (props: Props) => {
       refetch();
     }
     if (error) {
+      // console.log(error);
+      
       if ("data" in error) {
         const errorData = error as any;
         toast.error(errorData?.data?.message);

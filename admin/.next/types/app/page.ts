@@ -1,4 +1,4 @@
-// File: C:\Users\ys199\exporeactnativeapp\Lms-complete\admin\app\page.tsx
+// File: D:\unaccadmy\Lms-complete\admin\app\page.tsx
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
