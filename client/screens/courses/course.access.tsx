@@ -20,6 +20,12 @@ import ReviewCard from "@/components/cards/review.card";
 import { FontAwesome } from "@expo/vector-icons";
 import useUser from "@/hooks/auth/useUser";
 
+// import {VdoPlayerView} from 'vdocipher-rn-bridge';
+import {startVideoScreen} from 'vdocipher-rn-bridge';
+
+
+
+
 export default function CourseAccessScreen() {
   const [isLoading, setisLoading] = useState(true);
   const { user } = useUser();
@@ -50,26 +56,81 @@ export default function CourseAccessScreen() {
     subscription();
   }, []);
 
-  const fetchCourseContent = async () => {
-    const accessToken = await AsyncStorage.getItem("access_token");
-    const refreshToken = await AsyncStorage.getItem("refresh_token");
-    await axios
-      .get(`${SERVER_URI}/get-course-content/${data._id}`, {
-        headers: {
-          "access-token": accessToken,
-          "refresh-token": refreshToken,
-        },
-      })
-      .then((res: any) => {
-        setisLoading(false);
-        setcourseContentData(res.data.content);
-      })
-      .catch((error) => {
-        setisLoading(false);
-        router.push("/(routes)/course-details");
-      });
-  };
+  // const fetchCourseContent = async () => {
+  //   const accessToken = await AsyncStorage.getItem("access_token");
+  //   const refreshToken = await AsyncStorage.getItem("refresh_token");
+  //   await axios
+  //     .get(`${SERVER_URI}/get-course-content/${data._id}`, {
+  //       headers: {
+  //         "access-token": accessToken,
+  //         "refresh-token": refreshToken,
+  //       },
+  //     })
+  //     .then((res: any) => {
+  //       setisLoading(false);
+  //       console.log(res.data.content);
+        
+  //       setcourseContentData(res.data.content);
+  //     })
+  //     .catch((error) => {
+  //       setisLoading(false);
+  //       router.push("/(routes)/course-details");
+  //     });
+  // };
 
+  const fetchCourseContent = async () => {
+    try {
+      const accessToken = await AsyncStorage.getItem("access_token");
+      const refreshToken = await AsyncStorage.getItem("refresh_token");
+  
+      // Fetch course content
+      const courseContentResponse = await axios.get(
+        `${SERVER_URI}/get-course-content/${data._id}`,
+        {
+          headers: {
+            "access-token": accessToken,
+            "refresh-token": refreshToken,
+          },
+        }
+      );
+  
+      const courseContent = courseContentResponse.data.content;
+  
+      // Process each video and fetch VdoCipher OTP for videoUrl replacement
+      const updatedContent = await Promise.all(
+        courseContent.map(async (item) => {
+          const otpResponse = await axios.post(
+            `${SERVER_URI}/getVdoCipherOTP`,
+            { videoId: item.videoUrl }
+          );
+          
+  
+          const { otp, playbackInfo } = otpResponse.data;
+          // console.log(otp, playbackInfo);
+          
+  
+          // Replace videoUrl with the new URL containing OTP and playback info
+          return {
+            ...item,
+            videoUrl: `https://player.vdocipher.com/v2/?otp=${otp}&playbackInfo=${playbackInfo}`,
+            otp,
+            playbackInfo,
+          };
+        })
+      );
+  
+      // Set updated content in the state
+      setisLoading(false);
+      // console.log(updatedContent);
+      
+      setcourseContentData(updatedContent);
+    } catch (error) {
+      console.error("Error fetching course content or VdoCipher OTP:", error);
+      setisLoading(false);
+      router.push("/(routes)/course-details");
+    }
+  };
+  
   const handleQuestionSubmit = async () => {
     const accessToken = await AsyncStorage.getItem("access_token");
     const refreshToken = await AsyncStorage.getItem("refresh_token");
@@ -149,6 +210,8 @@ export default function CourseAccessScreen() {
     return starts;
   };
 
+  // const embedInfo = {otp: courseContentData[activeVideo]?.otp!, playbackInfo: 'some-playbackInfo'};
+
   return (
     <>
       {isLoading ? (
@@ -163,6 +226,15 @@ export default function CourseAccessScreen() {
               allowsFullscreenVideo={true}
             />
           </View>
+
+
+
+          {/* // <VdoPlayerView
+            style={{ width: "100%", aspectRatio: 16 / 9, borderRadius: 10 }}
+            otp={courseContentData[activeVideo]?.otp!}
+            playbackInfo={courseContentData[activeVideo]?.playbackInfo!}  
+          /> */}
+
           <View
             style={{
               flexDirection: "row",
