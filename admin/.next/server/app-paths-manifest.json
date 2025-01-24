@@ -1,4 +1,9 @@
 {
-  "/page": "app/page.js",
-  "/admin/page": "app/admin/page.js"
+  "/admin/orders-analytics/page": "app/admin/orders-analytics/page.js",
+  "/admin/courses-analytics/page": "app/admin/courses-analytics/page.js",
+  "/admin/courses/page": "app/admin/courses/page.js",
+  "/admin/create-course/page": "app/admin/create-course/page.js",
+  "/admin/team/page": "app/admin/team/page.js",
+  "/admin/users-analytics/page": "app/admin/users-analytics/page.js",
+  "/admin/edit-course/[id]/page": "app/admin/edit-course/[id]/page.js"
 }

@@ -28,7 +28,7 @@ export default function CoursesScreen() {
     axios
       .get(`${SERVER_URI}/get-layout/Categories`)
       .then((res) => {
-        setcategories(res.data.layout.categories);
+        setcategories(res.data?.layout?.categories);
         fetchCourses();
         setLoading(false);
       })

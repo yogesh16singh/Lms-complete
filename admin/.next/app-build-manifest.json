@@ -1,5 +1,11 @@
 {
   "pages": {
+    "/admin/users/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/users/page.css",
+      "static/chunks/app/admin/users/page.js"
+    ],
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -16,6 +22,64 @@
       "static/chunks/main-app.js",
       "static/css/app/admin/page.css",
       "static/chunks/app/admin/page.js"
+    ],
+    "/admin/invoices/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/invoices/page.css",
+      "static/chunks/app/admin/invoices/page.js"
+    ],
+    "/admin/create-course/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin/create-course/page.js"
+    ],
+    "/admin/courses/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/courses/page.css",
+      "static/chunks/app/admin/courses/page.js"
+    ],
+    "/admin/categories/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/categories/page.css",
+      "static/chunks/app/admin/categories/page.js"
+    ],
+    "/admin/courses-analytics/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/courses-analytics/page.css",
+      "static/chunks/app/admin/courses-analytics/page.js"
+    ],
+    "/admin/hero/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/hero/page.css",
+      "static/chunks/app/admin/hero/page.js"
+    ],
+    "/admin/edit-course/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin/edit-course/[id]/page.js"
+    ],
+    "/admin/users-analytics/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/users-analytics/page.css",
+      "static/chunks/app/admin/users-analytics/page.js"
+    ],
+    "/admin/orders-analytics/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/orders-analytics/page.css",
+      "static/chunks/app/admin/orders-analytics/page.js"
+    ],
+    "/admin/team/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/team/page.css",
+      "static/chunks/app/admin/team/page.js"
     ]
   }
 }
