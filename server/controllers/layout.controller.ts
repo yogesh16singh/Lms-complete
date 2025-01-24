@@ -81,8 +81,8 @@ export const editLayout = CatchAsyncError(
         const data = image.startsWith("https")
           ? bannerData
           : await cloudinary.v2.uploader.upload(image, {
-              folder: "layout",
-            });
+            folder: "layout",
+          });
 
         const banner = {
           type: "Banner",
@@ -98,48 +98,72 @@ export const editLayout = CatchAsyncError(
           subTitle,
         };
 
-        await LayoutModel.findByIdAndUpdate(bannerData._id, { banner });
+        if (bannerData) {
+          // Update the existing banner
+          await LayoutModel.findByIdAndUpdate(bannerData._id, { banner });
+        } else {
+          // Insert a new banner
+          await LayoutModel.create({ type: "Banner", banner });
+        }
+        // await LayoutModel.findByIdAndUpdate(bannerData._id, { banner });
       }
 
       if (type === "FAQ") {
         const { faq } = req.body;
+        console.log(faq);
+
         const FaqItem = await LayoutModel.findOne({ type: "FAQ" });
-        const faqItems = await Promise.all(
-          faq.map(async (item: any) => {
-            return {
-              question: item.question,
-              answer: item.answer,
-            };
-          })
-        );
-        await LayoutModel.findByIdAndUpdate(FaqItem?._id, {
-          type: "FAQ",
-          faq: faqItems,
-        });
+        const faqItems = faq.map((item: any) => ({
+          question: item.question,
+          answer: item.answer,
+        }));
+
+        if (FaqItem) {
+          // Update existing FAQ layout
+          await LayoutModel.findByIdAndUpdate(FaqItem._id, {
+            type: "FAQ",
+            faq: faqItems,
+          });
+        } else {
+          // Create a new FAQ layout
+          await LayoutModel.create({
+            type: "FAQ",
+            faq: faqItems,
+          });
+        }
       }
+
       if (type === "Categories") {
         const { categories } = req.body;
-        const categoriesData = await LayoutModel.findOne({
-          type: "Categories",
-        });
-        const categoriesItems = await Promise.all(
-          categories.map(async (item: any) => {
-            return {
-              title: item.title,
-            };
-          })
-        );
-        await LayoutModel.findByIdAndUpdate(categoriesData?._id, {
-          type: "Categories",
-          categories: categoriesItems,
-        });
+        const categoriesData = await LayoutModel.findOne({ type: "Categories" });
+
+        const categoriesItems = categories.map((item: any) => ({
+          title: item.title,
+        }));
+
+        if (categoriesData) {
+          // Update existing Categories layout
+          await LayoutModel.findByIdAndUpdate(categoriesData._id, {
+            type: "Categories",
+            categories: categoriesItems,
+          });
+        } else {
+          // Create a new Categories layout
+          await LayoutModel.create({
+            type: "Categories",
+            categories: categoriesItems,
+          });
+        }
       }
+
 
       res.status(200).json({
         success: true,
         message: "Layout Updated successfully",
       });
     } catch (error: any) {
+      console.log(error.message);
+
       return next(new ErrorHandler(error.message, 500));
     }
   }

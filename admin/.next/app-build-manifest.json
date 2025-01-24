@@ -16,6 +16,17 @@
       "static/chunks/main-app.js",
       "static/css/app/admin/page.css",
       "static/chunks/app/admin/page.js"
+    ],
+    "/admin/courses/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/courses/page.css",
+      "static/chunks/app/admin/courses/page.js"
+    ],
+    "/admin/edit-course/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin/edit-course/[id]/page.js"
     ]
   }
 }

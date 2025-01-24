@@ -23,14 +23,20 @@ exports.app.use(express_1.default.json({ limit: "50mb" }));
 exports.app.use((0, cookie_parser_1.default)());
 // cors => cross origin resource sharing
 exports.app.use((0, cors_1.default)({
-    origin: ["https://e-learning-client-nine.vercel.app"],
+    origin: ["*", "http://192.168.1.14:3000"],
     credentials: true,
 }));
+exports.app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+});
+// app.use(cors({ origin: 'http://localhost:3000' })); // Replace with your Next.js frontend URL
+// app.use(cors());
+// app.use(cors({ origin: 'http://localhost:3000' }));
 // api requests limit
 const limiter = (0, express_rate_limit_1.rateLimit)({
     windowMs: 15 * 60 * 1000,
     max: 100,
-    standardHeaders: 'draft-7',
+    standardHeaders: "draft-7",
     legacyHeaders: false,
 });
 // routes

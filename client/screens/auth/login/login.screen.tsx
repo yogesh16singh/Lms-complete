@@ -108,7 +108,7 @@ export default function LoginScreen() {
       })
       .catch((error) => {
         console.log(error);
-        Toast.show("Something went wrong!", {
+        Toast.show(`${error}`, {
           type: "danger",
         });
       });
@@ -128,7 +128,7 @@ export default function LoginScreen() {
           Welcome Back!
         </Text>
         <Text style={styles.learningText}>
-          Login to your existing account of Academy
+          Login to your existing account of Academy development platform
         </Text>
         <View style={styles.inputContainer}>
           <View>

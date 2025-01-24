@@ -56,49 +56,80 @@ export default function CartScreen() {
     setCartItems(updatedCartData);
   };
 
+  // const handlePayment = async () => {
+  //   try {
+  //     const accessToken = await AsyncStorage.getItem("access_token");
+  //     const refreshToken = await AsyncStorage.getItem("refresh_token");
+  //     const amount = Math.round(
+  //       cartItems.reduce((total, item) => total + item.price, 0) * 100
+  //     );
+
+  //     const paymentIntentResponse = await axios.post(
+  //       `${SERVER_URI}/payment`,
+  //       { amount },
+  //       {
+  //         headers: {
+  //           "access-token": accessToken,
+  //           "refresh-token": refreshToken,
+  //         },
+  //       }
+  //     );
+
+  //     const { client_secret: clientSecret } = paymentIntentResponse.data;
+
+  //     const initSheetResponse = await initPaymentSheet({
+  //       merchantDisplayName: "Academy Private Ltd.",
+  //       paymentIntentClientSecret: clientSecret,
+  //     });
+
+  //     if (initSheetResponse.error) {
+  //       console.error(initSheetResponse.error);
+  //       return;
+  //     }
+
+  //     const paymentResponse = await presentPaymentSheet();
+
+  //     if (paymentResponse.error) {
+  //       console.error(paymentResponse.error);
+  //     } else {
+  //       await createOrder(paymentResponse);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+
   const handlePayment = async () => {
     try {
+      // Mock payment process
+      console.log("Skipping actual payment process for testing purposes.");
+  
       const accessToken = await AsyncStorage.getItem("access_token");
       const refreshToken = await AsyncStorage.getItem("refresh_token");
+  
+      // Calculate the total amount
       const amount = Math.round(
         cartItems.reduce((total, item) => total + item.price, 0) * 100
       );
-
-      const paymentIntentResponse = await axios.post(
-        `${SERVER_URI}/payment`,
-        { amount },
-        {
-          headers: {
-            "access-token": accessToken,
-            "refresh-token": refreshToken,
-          },
-        }
-      );
-
-      const { client_secret: clientSecret } = paymentIntentResponse.data;
-
-      const initSheetResponse = await initPaymentSheet({
-        merchantDisplayName: "Academy Private Ltd.",
-        paymentIntentClientSecret: clientSecret,
-      });
-
-      if (initSheetResponse.error) {
-        console.error(initSheetResponse.error);
-        return;
-      }
-
-      const paymentResponse = await presentPaymentSheet();
-
-      if (paymentResponse.error) {
-        console.error(paymentResponse.error);
-      } else {
-        await createOrder(paymentResponse);
-      }
+  
+      console.log(`Mock payment amount: ${amount}`);
+  
+      // Simulate payment sheet and order creation
+      const mockPaymentResponse = {
+        id: "mock_payment_id_123",
+        status: "succeeded",
+      };
+  
+      console.log("Mock payment completed successfully:", mockPaymentResponse);
+  
+      // Proceed to order creation
+      await createOrder(mockPaymentResponse);
     } catch (error) {
-      console.error(error);
+      console.error("Error during mock payment process:", error);
     }
   };
-
+  
   const createOrder = async (paymentResponse: any) => {
     const accessToken = await AsyncStorage.getItem("access_token");
     const refreshToken = await AsyncStorage.getItem("refresh_token");

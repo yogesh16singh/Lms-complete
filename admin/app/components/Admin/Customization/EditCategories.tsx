@@ -17,11 +17,15 @@ const EditCategories = (props: Props) => {
   });
   const [editLayout, { isSuccess: layoutSuccess, error }] =
     useEditLayoutMutation();
-  const [categories, setCategories] = useState<any>([]);
+
+    const [categories, setCategories] = useState<any[]>([]);
+    // const [categories, setCategories] = useState<any[]>(() => initialCategories || []);
+
+  // const [categories, setCategories] = useState<any>([]);
 
   useEffect(() => {
     if (data) {
-      setCategories(data.layout.categories);
+      setCategories(data?.layout?.categories);
     }
     if (layoutSuccess) {
         refetch();
@@ -43,12 +47,14 @@ const EditCategories = (props: Props) => {
   };
 
   const newCategoriesHandler = () => {
-    if (categories[categories.length - 1].title === "") {
+    if (categories && categories.length > 0 && categories[categories.length - 1].title === "") {
       toast.error("Category title cannot be empty");
     } else {
-      setCategories((prevCategory: any) => [...prevCategory, { title: "" }]);
+      setCategories((prevCategory: any) => [...(prevCategory || []), { title: "" }]);
     }
   };
+  
+
 
   const areCategoriesUnchanged = (
     originalCategories: any[],
@@ -62,10 +68,12 @@ const EditCategories = (props: Props) => {
   };
 
   const editCategoriesHandler = async () => {
+    
     if (
-      !areCategoriesUnchanged(data.layout.categories, categories) &&
+      !areCategoriesUnchanged(data?.layout?.categories, categories) &&
       !isAnyCategoryTitleEmpty(categories)
     ) {
+      console.log(categories);
       await editLayout({
         type: "Categories",
         categories,
@@ -118,14 +126,14 @@ const EditCategories = (props: Props) => {
               styles.button
             } !w-[100px] !min-h-[40px] !h-[40px] dark:text-white text-black bg-[#cccccc34] 
             ${
-              areCategoriesUnchanged(data.layout.categories, categories) ||
+              areCategoriesUnchanged(data?.layout?.categories, categories) ||
               isAnyCategoryTitleEmpty(categories)
                 ? "!cursor-not-allowed"
                 : "!cursor-pointer !bg-[#42d383]"
             }
             !rounded absolute bottom-12 right-12`}
             onClick={
-              areCategoriesUnchanged(data.layout.categories, categories) ||
+              areCategoriesUnchanged(data?.layout?.categories, categories) ||
               isAnyCategoryTitleEmpty(categories)
                 ? () => null
                 : editCategoriesHandler
