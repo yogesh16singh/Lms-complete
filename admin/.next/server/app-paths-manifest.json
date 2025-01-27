@@ -1,7 +1,4 @@
 {
-  "/page": "app/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/admin/page": "app/admin/page.js",
-  "/admin/courses/page": "app/admin/courses/page.js",
-  "/admin/edit-course/[id]/page": "app/admin/edit-course/[id]/page.js"
+  "/admin/create-course/page": "app/admin/create-course/page.js",
+  "/admin/courses/page": "app/admin/courses/page.js"
 }

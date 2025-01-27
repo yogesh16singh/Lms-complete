@@ -1,4 +1,4 @@
-// File: D:\unaccadmy\Lms-complete\admin\app\layout.tsx
+// File: C:\Users\ys199\exporeactnativeapp\Lms-complete\admin\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

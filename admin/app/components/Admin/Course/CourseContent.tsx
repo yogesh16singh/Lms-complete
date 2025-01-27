@@ -1,5 +1,5 @@
 import { styles } from "@/app/styles/style";
-import React, { FC, useState } from "react";
+import React, { ChangeEvent, FC, useState } from "react";
 import { toast } from "react-hot-toast";
 import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
 import { BsLink45Deg, BsPencil } from "react-icons/bs";
@@ -25,6 +25,84 @@ const CourseContent: FC<Props> = ({
   );
 
   const [activeSection, setActiveSection] = useState(1);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [selectedFileUploaded, setSelectedFileUploaded] = useState(false);
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    setSelectedFileUploaded(false);
+    setVideoFile(file || null);
+  };
+
+  const handleUpload = async (index: number) => {
+    if (!videoFile) {
+      alert('Please select a video file.');
+      return;
+    }
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', videoFile);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData, // Send FormData directly
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        // setVideoUrl(data.url);
+        console.log("data",data.url)
+        setSelectedFileUploaded(true);
+        const updatedData = [...courseContentData];
+        updatedData[index].videoUrl = data.url;
+        setCourseContentData(updatedData);
+      } else {
+        console.error('Upload failed:', data.message);
+      }
+    } catch (error) {
+      console.error('Error uploading video:', error);
+    } finally {
+      setUploading(false);
+    }
+    // try {
+    //   // Convert file to Base64
+    //   const reader = new FileReader();
+    //   reader.readAsDataURL(videoFile);
+    //   reader.onloadend = async () => {
+    //     try {
+    //       const res = await fetch('/api/upload', {
+    //         method: 'POST',
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({ file: reader.result }),
+    //       });
+
+    //       const data = await res.json();
+
+    //       if (res.ok) {
+    //         // setVideoUrl(data.url);
+    //         const updatedData = [...courseContentData];
+    //          updatedData[index].videoUrl = data.url;
+    //          setCourseContentData(updatedData);
+    //       } else {
+    //         console.error('Upload failed:', data.message);
+    //       }
+    //     } catch (error) {
+    //       console.error('Error uploading video:', error);
+    //     } finally {
+    //       setUploading(false);
+    //     }
+    //   };
+    // } catch (error) {
+    //   console.error('Error reading file:', error);
+    //   setUploading(false);
+    // }
+  };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -221,7 +299,7 @@ const CourseContent: FC<Props> = ({
                         }}
                       />
                     </div>
-                    <div className="mb-3">
+                    {/* <div className="mb-3">
                       <label className={styles.label}>Video Url</label>
                       <input
                         type="text"
@@ -234,6 +312,28 @@ const CourseContent: FC<Props> = ({
                           setCourseContentData(updatedData);
                         }}
                       />
+                    </div> */}
+                     <div className="mb-3 d-flex flex-col">
+                      <label className={styles.label}>Upload Video</label>
+                      <input
+                        className={` ${styles.input}`}
+                        style={{ height: '30px !important' }}
+                        type="file"
+                        accept="video/*"
+                        onChange={handleFileChange}
+                        // className="my-2"
+                      />
+                      {!selectedFileUploaded && (
+                       <button
+                        onClick={()=>handleUpload(index)}
+                        disabled={uploading}
+                        className="px-4 py-2 mt-2 bg-blue-500 text-white rounded"
+                      >
+                        {uploading ? 'Uploading...' : 'Upload Video'}
+                      </button>
+                      )}
+
+
                     </div>
                     <div className="mb-3">
                       <label className={styles.label}>Video Length (in minutes)</label>

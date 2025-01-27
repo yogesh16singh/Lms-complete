@@ -94,38 +94,13 @@ export default function CourseAccessScreen() {
         }
       );
   
-      const courseContent = courseContentResponse.data.content;
+      const courseContent = courseContentResponse.data.content || [];
   
-      // Process each video and fetch VdoCipher OTP for videoUrl replacement
-      const updatedContent = await Promise.all(
-        courseContent.map(async (item) => {
-          const otpResponse = await axios.post(
-            `${SERVER_URI}/getVdoCipherOTP`,
-            { videoId: item.videoUrl }
-          );
-          
-  
-          const { otp, playbackInfo } = otpResponse.data;
-          // console.log(otp, playbackInfo);
-          
-  
-          // Replace videoUrl with the new URL containing OTP and playback info
-          return {
-            ...item,
-            videoUrl: `https://player.vdocipher.com/v2/?otp=${otp}&playbackInfo=${playbackInfo}`,
-            otp,
-            playbackInfo,
-          };
-        })
-      );
-  
-      // Set updated content in the state
       setisLoading(false);
-      // console.log(updatedContent);
       
-      setcourseContentData(updatedContent);
+      setcourseContentData(courseContent);
     } catch (error) {
-      console.error("Error fetching course content or VdoCipher OTP:", error);
+      console.error("Error fetching course content", error);
       setisLoading(false);
       router.push("/(routes)/course-details");
     }
